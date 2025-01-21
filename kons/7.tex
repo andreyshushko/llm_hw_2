@@ -1,0 +1,99 @@
+\section{Метод сопряженных градиентов. Наискорейший спуск}
+
+Напомним, что константа наискорейшего спуска $\alpha_k = \argmin \limits_{\alpha_k} f(x_k) = \dfrac{\nabla f(x_k)^T \nabla f(x_k) }{\nabla f(x_k)^T A \nabla f(x_k)}$. С ней мы будем сравнивать константы метода сопряженных градиентов.
+
+Выпишем несколько итераций метода сопряженных градиентов:
+\begin{align*}
+    x_1 &= x_0 + \alpha_0 r_0, &r_0 = -\nabla f(x_0)\\
+    x_2 &= x_1 + \alpha_1 r_1, &r_1 = -\nabla f(x_1)\\
+    &\hspace{0.5em}\vdots &
+\end{align*}
+То есть значение на $t$-ой итерации будет равно $x_0 + \sum \limits_{i = 0}^{t - 1} \alpha_i r_i$. Тогда очевидно, что $x_t \in x_0 + \mathrm{span} \set{r_0, \ldots, r_{t - 1}}$.
+
+Рассмотрим пример решения квадратичной задачи: $f(x) = \frac{1}{2}x^T A x - b$. Тогда $\nabla f(x) = Ax - b \implies x^* = A^{-1} b$. Как мы можем видеть, чтобы вычислить значение вектора решения будет нам нужно обращать матрицу, что процесс довольно трудоемкий. Попробуем сойтись к решению методом сопряженных элементов:
+\begin{align*}
+    r_0 &= -\nabla f(x_0) = b - Ax_0\\
+    r_1 &= -\nabla f(x_1) = b - Ax_1 = b - Ax_0 - A\alpha_0 r_0 = b - Ax_0 - \alpha Ab - \alpha A^2x_0\\
+    r_2 &= -\nabla f(x_2) = b - Ax_2 = b - A(x_o + \alpha_0r_0 + \alpha_1r_1) = b - \alpha_0 Ab - \alpha_1 Ab + \alpha_0\alpha_1 A^2b + A^3x_0.
+\end{align*}
+Будем считать, что $x_0 = 0$. В выражении для $r_k$ всегда найдутся слагаемые вида $A^kb$. Тогда
+\begin{equation*}
+    x_t \in \mathrm{span}\set{b, Ab, A^2b, \ldots, A^{t - 1}b}.
+\end{equation*}
+На каждой итерации мы минимизруем выражение $f(x_{k + 1})$. Но, возможно, найдется $y \in \mathrm{span}\set{b, Ab, \ldots, A^kb}$ такой, что $f(y) \leq f(x^{k + 1})$. Будем выполнять процедуру
+\begin{equation*}
+    y = x_k + \beta_k d_k,
+\end{equation*}
+где $d_k$ уже \textit{не является} направлением антиградиента, а $\beta_k$ выбирается \textit{не жадным образом}. В худшем случае $y = x_k$, а в лучшем мы найдем более оптимальную точку. Итак, нам нужно
+\begin{equation*}
+    y = \argmin_{x \in \mathcal{K}_t + x_0} f(x)
+\end{equation*}
+где $\mathcal{K}_t = \mathrm{span}\set{b, Ab, \ldots, A^{t - 1}b}$ называется пространством Крылова. Поскольку $x \in \mathcal{K}_t + x_0$, в общем виде можно записать
+\begin{equation*}
+    y = x_0 + \sum_{i = 0}^{t - 1} \beta_i p_i,
+\end{equation*}
+где $\set{p_0, \ldots, p_{t - 1}}$ -- базис в $K_t$. Тогда можем искать оптимальный набор коэффициентов $\beta = (\beta_0, \ldots, \beta_{t - 1})$:
+\begin{equation*}
+    \beta = \argmin_{\beta} f\delim*{x_0 + \sum_{i = 0}^{t - 1} \beta_ip_i}.
+\end{equation*}
+Сама эта задача достаточно сложная. Однако можно попытаться найти такой базис $p$, что рассматриваемую функцию можно представить в виде
+\begin{equation*}
+    f\delim*{x_0 + \sum_{i = 0}^{t - 1} \beta_ip_i} - f(x_0) = \sum_{i = 0}^{t - 1} \delim*{f(x_0 + \beta_ip_i) - f(x_0)}.
+\end{equation*}
+У этого уравнения левую и правую части обозначим $LHS$ и $RHS$ соответственно (для простоты записи). Для $f(x) = \frac12 x^TAx - bx$:
+\begin{multline*}
+    LHS = \frac12\delim*{x_0 + \sum \beta_ip_i}^TA\delim*{x_0 + \sum \beta_ip_i} - b\delim*{x_0 + \sum \beta_ip_i} - \frac12x_0^TAx_0 + bx_0 = \\
+    = \sum \beta_ip_i^TAx_0 + \frac12\sum \beta_i\beta_j p_i^TAp_j - b\sum \beta_ip_i.
+\end{multline*}
+С другой стороны
+\begin{equation*}
+    RHS = \sum_{i = 0}^{t - 1} \set*{\beta_ip_i^TAx_0 - p_i^TAp_i\beta_i^2 - b\beta_ip_i}.
+\end{equation*}
+Тогда
+\begin{equation*}
+    LHS - RHS = \frac12 \sum_{i \neq j} \beta_i\beta_j p_i^TAp_j.
+\end{equation*}
+Значит, нужно найти такой $p$, что $p_i^TAp_j = 0$, $\forall i \neq j,\, i, j \leq t - 1$. Это можно получить с помощью метода ортагонализации Грамма -- Шмидта. 
+
+Итак, наша задача свелась к
+\begin{equation*}
+    \beta = \argmin_{\beta} \sum_{i = 0}^{t - 1} f_i(x_0 + \beta_ip_i).
+\end{equation*}
+Метод же имеет вид
+\begin{equation*}
+    y_{t + 1} = y_t + \alpha_tp_t,
+\end{equation*}
+где
+\begin{equation*}
+    y_t = \argmin_{y \in \mathcal{K}_{t - 1} + x_0} f(y) \iff \alpha_t = \argmin_{\alpha_t} f(y_t + \alpha_tp_t) \iff \beta_t = \argmin_{\beta} \set{f(x_0 + \beta_ip_i) - f(x_0)}.
+\end{equation*}
+Здесь
+\begin{align*}
+    y_t &\in x_0 + \mathrm{span}\set{p_0, \ldots, p_{t - 1}}, \\
+    y_{t + 1} &\in x_0 + \mathrm{span}\set{p_0, \ldots, p_t}.
+\end{align*}
+$\beta_t$ можно найти подстановкой:
+\begin{align*}
+    \frac12 x_0^TAx_0 + \frac{b_i^2}{2} P_i^TAp_i + \frac{\beta_i}{2}p_i^TAx_0 - x_0b - \beta_ip_i b - \frac12x_0^TAx_0 + bx_0 &= 0\\
+    \frac{b_i^2}{2} P_i^TAp_i + \frac{\beta_i}{2}p_i^TAx_0 - \beta_ip_i b &= 0\\
+    \frac{b_i}{2} P_i^TAp_i + \frac{1}{2}p_i^TAx_0 - p_i b &= 0,
+\end{align*}
+откуда
+\begin{equation*}
+    \beta_i = \frac{p_ib - p_i^TAx_0 / 2}{p_i^TAp_i} = \frac{p_i^T(b - Ax_0 / 2)}{p_i^TAp_i} = -\frac{p_i^Tr_0}{p_i^TAp_i}, \hspace{2em} \alpha_i = \frac{p_i^Tr_0}{p_i^TAp_i}.
+\end{equation*}
+Далее, имеем
+\begin{equation*}
+    p_{t + 1} = r_{t + 1} + \frac{r_t^Tr_t}{r_{t + 1}^Tr_{t + 1}}p_t,
+\end{equation*}
+где $r_{t + 1} = b - Ax_{t + 1}$. Используя это, наконец, получаем
+\begin{equation*}
+    \alpha_t = \frac{r_t^Tr_t}{p_t^TAp_t}.
+\end{equation*}
+
+
+
+
+
+
+    

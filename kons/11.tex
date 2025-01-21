@@ -1,0 +1,186 @@
+\section{Методы редукции дисперсии}
+
+Напомним, что итеративный метод имеет \textit{линейную} сходимость, если для невязки $r^{k + 1}$ выполнено следующее соотношение:
+\begin{equation*}
+    r^{k + 1} \leq q \cdot r^k,
+\end{equation*}
+где $q \in (0, 1)$.
+
+Немного изменим постановку задача оптимизации:
+\begin{task}
+    \begin{equation*}
+        \min \limits_{x \in \R^d} \frac{1}{m} \sum \limits_{i = 1}^m f_i(x),
+    \end{equation*}
+    где рассматриваемые $f_i(x)$ будут $L$-гладкими и $\mu$-сильно-выпуклымию
+\end{task}
+
+
+\begin{task}
+    \textbf{Стохастический градиентный спуск.}
+\begin{itemize}
+    \item[\textbf{--}] выбираем $i = \overline{1, m}$ случайно равновероятно; 
+    \item[\textbf{--}] делаем итерацию спуска 
+    \begin{equation*}
+        x^{k + 1} = x^k - \alpha_k\underbrace{\nabla f_i(x)}_{g_k}.
+    \end{equation*}
+\end{itemize}
+\end{task}
+\begin{theorem}
+    Метод сходится, если выполнено
+    \begin{enumerate}
+        \item[(1)] \begin{equation*}
+            \EE g_k  = \nabla f(x),
+        \end{equation*}
+        то есть, расписывая градиент под матожиданием
+        \begin{equation*}
+            \sum_{i = 1}^m \frac{1}{m}\nabla f_i(x) = \nabla f(x);
+        \end{equation*}
+        \item[(2)] \begin{equation*}
+            \EE\Squared*{\norm{g_k - \underbrace{\nabla f(x)}_{\EE g_k}}_2^2} \leq \frac{\sigma^2}{r^2} \sum \text{Var},
+        \end{equation*}
+        то есть дисперсия значений градиента должна быть ограничена (правая часть есть параметры системы).
+    \end{enumerate}
+\end{theorem}
+
+\begin{example}
+    Скорость сходимости метода:
+   \begin{equation*}
+        f(x^N) - f(x^*) = \mathcal{O}\delim*{\frac{L}{M}\cdot \frac{R}{N}}^2 \leq \varepsilon,
+    \end{equation*}
+    где
+    \begin{equation*}
+        N = \frac{L}{M}\cdot\frac{1}{\varepsilon}.
+    \end{equation*}
+\end{example}
+
+Если мы будем применять этот метод, то в конце мы будем ходить около искомого значения вследствие случайности. Чтобы этого избежать, модифицируем константу в шаге:
+\begin{equation*}
+    x^{k + 1} = x^k - \alpha_k\cdot\frac{1}{r}\sum_{j = 1}^r \nabla f_j(x).
+\end{equation*}
+Теперь мы выбираем не один случайный градиент, а $r$ градиентов. Тогда дисперсия будет равняться
+\begin{equation*}
+    \EE \Squared*{\delim*{\frac{1}{r}\sum_{j = 1}^r (f_j'(x)) - f'(x)}^2} = \EE \Squared*{\delim*{\frac{1}{r}\sum_{j = 1}^r(f'_j(x) - \EE f_j'(x)}^2} = \frac{1}{r^2}\mathrm{Var}(\nabla f_i) \leq \frac{\sigma^2}{m}.
+\end{equation*}
+То есть мы уменьшили дисперсию в $m$ раз. Правда это не решает проблемы хождения "около"{} искомого значения. Проблема будет решена, если коэффициент в шаге будет стремиться к нулю:
+\begin{equation*}
+    \alpha_k\cdot \frac{1}{r}\sum_{i = 1}^r \nabla f_j(x) \to 0.
+\end{equation*}
+
+В современных методах можно брать $\alpha_k = \alpha = \mathrm{const}$ при условии, что
+\begin{equation*}
+    \EE \Squared*{\norm{g_k - \nabla f(x)}_2^2} \xrightarrow{k \to \infty} 0. \label{conv-cond}
+\end{equation*}
+
+\begin{table}[]
+    \centering
+    \bgroup
+    \def\arraystretch{2.25}
+    \begin{tabular}{|c|c|c|}
+        \hline
+        {} & \# iterations & Оракульная сложность \\
+        \hline
+        GD & $\displaystyle \log \frac{1}{\varepsilon}$ & $\mathcal{O} (m\cdot d)$ \\
+        \hline
+        SGD & $\displaystyle \frac{1}{d}$ & $\mathcal{O} (d)$ \\
+        \hline
+        VR & $\displaystyle \log \frac{1}{\varepsilon}$ & $\mathcal{O} (m\cdot d)$ \\
+        \hline
+    \end{tabular}
+    \egroup
+    \label{tab:sgd-comp}
+\end{table}
+
+\begin{task}
+    \textbf{Координатный градиентный спуск}
+    Рассмотрим в качестве стохастической аппрокисмации градиента следующую итерацию:
+    \begin{equation*}
+        x^{k + 1} = x^k - \alpha \nabla_j f(x) e_j.
+    \end{equation*}
+    Отличие от SGD в том, что мы берем полный градиент и выбираем случайно его $j$-ую компоненту (в SGD берем градиент $f_i$).
+    
+    Для этого метода будет верно, что скорость сходимость будет 
+    \begin{equation*}
+        f(x^k) - f(x^*) \leq \delim*{1 - \frac{\mu}{dL_{\max}}}^T (f(x^0) - f(x^*))
+    \end{equation*}
+\end{task}
+
+Как нетрудно заметить, данный метод будет сходиться в приблизительно $d$ раз медленнее, чем обычный GD, но итоговая сложность будет такая же. А вот если выбрать среднюю $\overline{L}$ по всем значениям $L_i$ для каждой координаты (для многомерной функции значения констант гладкости, очевидно, будут меняться в зависимости от координат), то тогда она будет меньше $L_{\text{max}}$, что даст более быструю сходимость.
+
+\begin{example}
+    \textbf{Задача.} $f(x) = x_1^2 + 10x_2^2$.
+\end{example}
+
+Имеем
+\begin{equation*}
+    \nabla f(x) = \begin{pmatrix} 2 & 0 \\ 0 & 20 \end{pmatrix},
+\end{equation*}
+$L = 20$.
+
+\begin{definition}
+    Многомерная функция $f(x)$ является \textbf{$\vec{L}$-гладкой} ($\vec{L} = (L_1, \ldots, L_\alpha)^T$), если 
+    \begin{equation*}
+        f(x + \lambda e_i) \leq f(x) + \lambda \nabla_i f(x) + \frac{L_i}{2}\lambda^2.    
+    \end{equation*}
+\end{definition}
+Это обычное определение гладкости с $y = x + \lambda e_i$.
+
+\subsection{Сага. Новолуние.}
+
+Немножко преобразуем выражение градиента:
+\begin{equation*}
+    \nabla f(x) = \frac{1}{m}\sum_{i = 1}^m (\nabla f_i(x) - v^i + v^i) = \frac{1}{m}\sum_{i = 1}^m \delim*{\nabla f_i(x) - v^i + \frac{1}{m}\sum_{j = 1}^m v^j} = \frac{1}{m} \sum_{j = 1}^m \nabla f_i(x, v).
+\end{equation*}
+
+Проверим, что это будет несмещенная оценка градиента:
+\begin{equation*}
+    \EE_i \Squared*{\nabla f_i(x) - v^i + \frac{1}{m}\sum_{j = 1}^m v^j} = \frac{1}{m}\sum_{j = 1}^m v^j + \EE_i \Squared{\nabla f_i (x) - v^i} = \frac{1}{m}\sum_{j = 1}^m v^j + \nabla f(x) - \sum_{i = 1}^m \frac{1}{m}v^j = \nabla f(x).
+\end{equation*}
+
+Осталось проверить \hyperref[conv-cond]{вот это условие:}
+\begin{equation*}
+    \EE \Squared*{\norm*{\underbrace{\nabla f_i(x) - v^i}_{\xi} + \underbrace{\frac{1}{m}\sum_{i = 1}^m v^j - \nabla f(x)}_{\EE \xi}}_2^2}. 
+\end{equation*}
+Имеем
+\begin{equation*}
+    \mathrm{Var} \xi = \EE \xi^2 - (\EE \xi)^2 \leq \EE \xi^2,
+\end{equation*}
+поэтому
+\begin{equation*}
+    \EE \Squared*{\norm{\nabla f_i(x) - v^i + \frac{1}{m}\sum_{i = 1}^m v^j - \nabla f(x)}_2^2} \leq \EE\Squared{\norm*{\nabla f_i(x) - v^i}_2^2} \xrightarrow{k \to \infty} 0.
+\end{equation*}
+
+Все эти рассуждения относятся к методам SAG, SAGA, SVRG.
+
+\begin{minted}{c}
+    for k = 1, ... do
+        1. sample i
+            v_old = v_i
+            v_i = grad(f_i(x_k))
+            v_{k + 1} = x_k - alpha * (v_i - v_old + bg_k)
+            bg_k = g_{k - 1} + v_i / m - v_old / m
+\end{minted}
+
+\section{Безградиентные методы}
+
+Первый и самый очевидный способ -- оценивать значение градиента через самую простую разностную схему, тогда шаг псевдоградиентного спуска есть 
+\begin{equation*}
+    x^{k + 1} = x^k - \alpha \cdot \norm*{\frac{1}{2\tau} \delim*{f(x + \tau) - f(x - \tau)}}_i.
+\end{equation*}
+Но также можно использовать стохастический градиент, чтобы считать градиент не для каждой компоненты, а только у выбранной $i$-ой, причем, как уже раньше было обсуждено для стохастического градиентного спуска, необходимо требовать гладкость оптимизируемой функции, ибо в противном случае матожидание по величене координаты градиента будет неограничена, что дает противоречие со сходимостью:
+\begin{equation*}
+    \left[ \tilde{\nabla} f(x) \right]_i = \frac{n}{2\tau} \delim*{f(x + \tau e) - f(x - \tau e)},
+\end{equation*}
+где $e$ есть $i$-ый базисный вектор, чтобы вектор градиента выглядел как $i$-ая его компонента. 
+
+В случае негладкой функции будем рассматривать градиент $g(x, e)$ с равномерно распределенным на шаре вектором $e$, то есть для него выполнено, что $\norm{e} \leq 1$. 
+
+Далее последовало очень рукомахательное объяснение того, что у нас все будет <<хорошо>>. В общем случае показывается, что матожидания $g(x, e)$ будет в точности равно значению несмещенного градиента (в предположении гладкости функции $f_\tau$ на отрезке $(- \tau, + \tau)$. 
+
+Вводится она следующим образом:
+\begin{equation*}
+    f_\tau (x) = \EE \limits_{u \in \mathcal{B}} f(x + \tau u), 
+\end{equation*}
+и хотим оценить ее отклонение от изначальной функции. 
+
+
+

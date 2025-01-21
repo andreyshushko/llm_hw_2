@@ -1,0 +1,532 @@
+\newpage
+\section{Консультация О.А.Пырковой}
+
+Смотрите сайт Ольги Анатольеввны (подраздел ГОС) по \href{https://www.pyrkovaoa-fizteh.ru/ГОС-по-математике/}{ссылке}. Там есть подготовительные материалы и консультации. 
+
+% \subsection{Линейные обыкновенные дифференциальные уравнения с постоянными
+% коэффициентами иправойчастью-квазимногочленом.}
+
+
+
+% \subsection{Системы линейных однородных дифференциальных уравнений с постоянными
+% коэффициентами, методы их решения.}
+
+
+
+% \subsection{Линейные обыкновенные дифференциальные уравнения с переменными
+% коэффициентами. Фундаментальная система решений. Определитель Вронского.
+% Формула Лиувилля-Остроградского.}
+
+
+
+% \subsection{Линейные обыкновенные дифференциальные уравнения с переменными
+% коэффициентами. Фундаментальная система решений. Определитель Вронского.
+% Формула Лиувилля-Остроградского.}
+
+\subsection{Решение задач к письменной части.}
+
+\begin{task}
+    \textbf{15(1).} Решить уравнение
+    \begin{equation*}
+        y' = \frac{y}{x - 2y^3}.
+    \end{equation*}
+\end{task}
+
+Очевидным решением является $y \equiv 0$ (потеря этого решения ведет к потере балла за задачу). Иначе имеем
+\begin{align*}
+        x'_y &= \frac{x - 2y^3}{y}, \\
+        yx'_y - x &= -2y^3.
+\end{align*}
+
+\textbf{Принцип суперпозиции:} решение линейного уравнения можно искать в виде
+\begin{equation*}
+    x = x(y) = x_{\text{одн}} + x_{\text{частн}}
+\end{equation*}
+
+Наше уравнение имеет первый порядок, поэтому ФСР содержит одно решение $x_1(y)$ и $x_{\text{одн}} = Cx_1(y)$.
+
+Далее, заметим, что
+\begin{equation*}
+    yx'_y - x = 0
+\end{equation*}
+-- это уравнение Эйлера. Значит, его можно решать тремя способами:
+\begin{enumerate}
+    \item угадать решение $x(y) = y$;
+    \item решать уравнение с разделяющимися перменными;
+    \item решать уравнение Эйлера заменой $x = y^{\alpha}$.
+\end{enumerate}
+
+Характеристическое уравнение имеет вид $\alpha - 1 = 0$, поэтому находим $x(y) = y$.
+
+Далее, необходимо найти частное решение неоднородного уравнения. Это тоже можно сделать несколькими способами:
+\begin{enumerate}
+    \item метод вариации постоянных;
+    \item увидеть, что $-2y^3 = P_0(\ln y) \cdot y^{\mu}$, где $s = 0$, а $\mu = 3$ не является корнем характеристического уравнения, поэтому решение можно искать в виде
+    \begin{equation*}
+        x_2 = Q_0(\ln y)\cdot (\ln y)^{s = 0} \cdot y^3 = ay^3;
+    \end{equation*}
+    Из уравнения получаем $3a - a = -2$, откуда $a = -1$.
+\end{enumerate}
+
+Итого ответ: $x(y) = -y^3 + Cy$.
+
+\begin{task}
+    \textbf{16(1).} Решить уравнение
+    \begin{equation*}
+        y'' - y = e^{-x} - e^{6x}.
+    \end{equation*}
+\end{task}
+
+1. Решаем однородное уравнение
+\begin{equation*}
+    y'' - y = 0.
+\end{equation*}
+Характеристическое уравнение $\lambda^2 - 1 = 0$, откуда $\lambda = \pm 1$. ФСР: $e^x$, $e^{-x}$, однородное решение равно $y_0 = C_1e^x + C_2e^{-x}$.
+
+2. Уравнение
+\begin{equation*}
+    y'' - y = e^{-x}
+\end{equation*}
+дает резонанс: $e^{-x} = P_0(x)e^{\mu x}$, где $\mu = -1$ -- корень характеристического уравнения. Поэтому решение ищем в виде $y(x) = ax^1e^{-x}$.
+
+Выкладки опускаем, получаем частное решение $y = -\frac{1}{2}xe^{-x}$.
+
+3. Уравнение
+\begin{equation*}
+    y'' - y = e^{6x}
+\end{equation*}
+не дает резонанса, поэтому ищем решение в виде $y = ae^{6x}$. В итоге находим $a = \frac{1}{35}$.
+
+4. Получаем итоговое решение
+\begin{equation*}
+    y(x) = C_1e^x + C_2e^{-x} - \frac 12 xe^{-x} + \frac 1 {35} e^{6x}.
+\end{equation*}
+
+\begin{task}
+    \textbf{21-22. 12(4).} Решить дифференциальное уравнение
+    \begin{equation*}
+        y' - 2y = 6y^{3/2}e^{2x}.
+    \end{equation*}
+\end{task}
+Это уравнение Бернулли. Оно решается заменой
+\begin{equation*}
+    z = \frac{1}{y^{\frac 32 - 1}} = \frac{1}{\sqrt{y}}.
+\end{equation*}
+
+Но перед этим важно заметить решение $y \equiv 0$! За его потерю теряется также и один балл.
+
+В условиях нашей замены
+\begin{equation*}
+    z' = -\frac 12 \frac{y'}{y^{\frac 32}}.
+\end{equation*}
+Подставляя в исходное уравнение, получаем
+\begin{align*}
+    -2z' - 2z &= 6e^{2x}, \\
+    z' + z &= -3e^{2x}.
+\end{align*}
+
+Такие уравнения мы легко умеем решать, поэтому сразу выписываем его решение:
+\begin{equation*}
+    z = Ce^{-x} - e^{2x},
+\end{equation*}
+откуда решения исходного уравнения есть $y = (Ce^{-x} - e^{2x})^{-2}$ и $y \equiv 0$.
+
+\begin{task}
+    \textbf{20-21. 4(4).} Найти все действительные решения уравнения
+    \begin{equation*}
+        y'' + 6y' + 9y = -18xe^{-3x}.
+    \end{equation*}
+\end{task}
+
+Заметим, что правая часть является квази-полиномом $P_1(x)e^{-3x}$. 
+
+Характеристическое уравнение: $\lambda^2 + 6 \lambda + 9 = 0$, что дает $\lambda = -3$ кратности 2.
+ФСР: $e^{-3x}$, $xe^{-3x}$; однородное решение $y_{\text{одн}} = C_1e^{-3x} + C_2xe^{-3x}$. 
+
+Частное решение ищем в виде
+\begin{align*}
+    y(x) &= (ax + b)x^2e^{-3x} = (ax^3 + bx^2)e^{-3x}, \\
+    y'(x) &= (3ax^2 + 2bx - 3ax^3 - 3bx^2)e^{-3x}, \\
+    y''(x) &= \Squared*{6ax + 2b + 2(3ax^2 + 2bx)(-3) + 9(ax^3 + bx^2)}e^{-3x}.
+\end{align*}
+Подстановкой получаем уравнение
+\begin{equation*}
+    6ax + 2b = -18x,
+\end{equation*}
+откуда $a = -3$ и $b = 0$. Получаем ответ:
+\begin{equation*}
+    y(x) = C_1e^{-3x} + C_2xe^{-3x} - 3x^3e^{-3x}.
+\end{equation*}
+
+\begin{task}
+    \textbf{18-19. 11(4).} Решить задачу Коши
+    \begin{equation*}
+        y''(1 + y) = 5(y')^2, \hspace{1em} y(0) = 0, \hspace{1em} y'(0) = 1.
+    \end{equation*}
+\end{task}
+
+Уравнение не зависит от $x$, поэтому решаем заменой $z(y) = y'$, $y'' = z'_y \cdot y'_x = zz'$. Подставляем, получаем
+
+\begin{equation*}
+    zz'(1 + y) =5z^2.
+\end{equation*}
+
+Заметим, что $z \equiv 0$ является решением уравнения, но соотетствующий ему $y' \equiv 0$ не является решением задачи Коши. Поэтому можно поделить:
+
+\begin{equation*}
+    z'(1 + y) = 5z.
+\end{equation*}
+
+Решая это линейное уравнение, находим $z = C(1 + y)^5$. Константу найдем из условия $z(0) = y'(0) = 1$, откуда $C = 1$. Возвращаясь к замене, получаем
+\begin{equation*}
+    y' = (1 + y)^5,
+\end{equation*}
+откуда
+\begin{equation*}
+    -\frac 14 \frac{1}{(1 + y)^4} = x + C.
+\end{equation*}
+Из $y(0) = 0$ находим $C = -\frac 14$. В конечном счете имеем решение
+\begin{equation*}
+    y = (1 - 4x)^{-\frac 14} - 1.
+\end{equation*}
+
+Определитель Вронского:
+\begin{equation*}
+    W(x) = \begin{vmatrix}
+        y_1 & y_2 & \ldots & y_n \\ y'_1 & y'_2 & \ldots & y'_n \\ \vdots & \vdots & & \vdots \\ y^{(n - 1)}_1 & y^{(n - 1)}_2 & \ldots & y^{(n - 1)}_n
+    \end{vmatrix}.
+\end{equation*}
+
+Если решения линейно зависимы, то $W(x) = 0$.
+
+Для уравнения
+\begin{equation*}
+    \sum_{k = 0}^n a_{n - k}y^{(k)} = f(x)
+\end{equation*}
+имеет место формула
+\begin{equation*}
+    W(x) = W(x_0)\exp\set*{-\int_{x_0}^x \frac{a_1(\xi)}{a_0(\xi)}d\xi},
+\end{equation*}
+которая позволяет понизить порядок уравнения на 1. Мы эффективно используем её для решения уравнений второго порядка.
+
+Метод вариации постоянных: для однородного решения $y_{\text{одн}} = \sum C_ky_k$ имеет место система уравнений
+\begin{equation*}
+    \begin{cases}
+        \sum_{k = 0}^n C'_k y_k = 0, \\
+        \vdots \\
+        \sum_{k = 0}^n C'_k y_k^{(k - 2)} = 0, \\
+        \sum_{k = 0}^n C'_k y_k^{(k - 1)} = f(x) / a_0(x).
+    \end{cases}
+\end{equation*}
+
+Переходим к системам линейных уравнений. Пусть
+\begin{equation*}
+    \vec{y} = \begin{pmatrix}
+        y_1(x) \\ \vdots \\ y_n(x).
+    \end{pmatrix}
+\end{equation*}
+
+Системой линейных уравнений называется
+\begin{equation*}
+    \dot{\vec{y}} = A\vec{y} + \vec{f},
+\end{equation*}
+где $A = (a_{ij}(x))$. На ГОСе рассматриваем только случай $a_{ij} = \mathrm{const}$. 
+
+ФСР: $\vec{y}_1, \ldots, \vec{y}_n$, $\vec{y}_{\text{одн}} = \sum C_k\vec{y}_k$.
+
+Определитель матрицы $Y = (\vecl{y}_1, \ldots, \vecl{y}_n)$ -- $W = \det Y$.
+
+Формула Лиувилля -- Остроградского для этого случая
+\begin{equation*}
+    W(x) = W(x_0)\exp\set*{\int_{x_0}^x \tr A d\xi}.
+\end{equation*}
+
+Метод вариации постоянных даже проще: так как 
+\begin{equation*}
+    \sum_{k = 1}^n C'_k\vec{y}_k + \sum_{k = 1}^n C_k(\vec{y}_k)' = A\sum C_k\vec{y}_k + \vec{f},
+\end{equation*}
+то
+\begin{equation*}
+    \sum_{k = 1}^n C'_k\vec{y}_k = \vec{f}.
+\end{equation*}
+
+\begin{task}
+    \textbf{21-22. 11(4).} Решить систему
+    \begin{equation*}
+        \begin{cases}
+            \dot{x} = 4x + 2y + 13^{-t}, \\
+            \dot{y} = 3x + 3y + 5e^{-t}.
+        \end{cases}
+    \end{equation*}
+\end{task}
+
+Для уравнения $\dot{\vec{y}} = A\vec{y}$ нужно составить характеристическое уравнение $\det(A - \lambda E) = 0$.
+
+Имеем
+\begin{equation*}
+    A = \begin{pmatrix}
+        4 & 2 \\ 3 & 3
+    \end{pmatrix}
+\end{equation*}
+тогда $(4 - \lambda)(3 - \lambda) - 6 = \lambda^2 - 7\lambda + 6 = 0$, откуда $\lambda = 1$ и $\lambda = 6$. Находим собственные векторы и решение однородного уравнения
+
+\begin{equation*}
+    \vec{y}_{\text{одн}} = \begin{pmatrix}
+        x_{\text{одн}} \\ y_{\text{одн}}
+    \end{pmatrix} = C_1\begin{pmatrix}
+        -2 \\ 3
+    \end{pmatrix}e^t + C_2\begin{pmatrix}
+        1 \\ 1
+    \end{pmatrix}e^{6t}.
+\end{equation*}
+Имеем
+\begin{equation*}
+    \vec{f} = \begin{pmatrix}
+        13 \\ 5
+    \end{pmatrix}e^{-t},
+\end{equation*}
+поэтому частное решение ищем в виде
+\begin{equation*}
+    \vec{y}_2 = \begin{pmatrix}
+        a \\ b
+    \end{pmatrix}e^{-t}.
+\end{equation*}
+Подставляя в исходное уравнение, находим $a = -3$, $b = 1$. Ответ:
+\begin{equation*}
+    \vec{y} = \begin{pmatrix}
+        -3 \\ 1
+    \end{pmatrix}e^{-t} + C_1\begin{pmatrix}
+        -2 \\ 3
+    \end{pmatrix}e^t + C_2\begin{pmatrix}
+        1 \\ 1
+    \end{pmatrix}e^{6t}.
+\end{equation*}
+
+\begin{task}
+    \textbf{20-21. 5(4).} Решить задачу Коши
+    \begin{equation*}
+        \begin{cases}
+            \dot{x} = 2x - 5y, \\ \dot{y} = 4x - 10y,
+        \end{cases} \hspace{1em} \begin{cases}
+             x(0) = 9, \\ y(0) = 10.
+        \end{cases}
+    \end{equation*}
+\end{task}
+
+Характеристическое уравнение:
+\begin{equation*}
+    \begin{vmatrix}
+        3 - \lambda & 5 \\
+        4 & -10 -\lambda
+    \end{vmatrix} = \lambda^2 + 8 \lambda = 0 \implies \lambda = 0, 8.
+\end{equation*}
+
+Для $\lambda_1 = 0$ собственный вектор $\vecl{h}_1 = (5, 2)^T$, для $\lambda_2 = -8$ собственный вектор $\vec{h}_2 = (1, 2)^T$. Получаем решение
+\begin{equation*}
+    \begin{pmatrix}
+        x \\ y
+    \end{pmatrix} = C_1 \begin{pmatrix}
+        5 \\ 1
+    \end{pmatrix} + C_2\begin{pmatrix}
+        1 \\ 2
+    \end{pmatrix}e^{-8t}
+\end{equation*}
+
+Из условий Коши имеем
+\begin{equation*}
+    \begin{cases}
+        9 = 5C_1 + C_2, \\
+        10 = 1C_1 + 2C_2,
+    \end{cases}
+\end{equation*}
+откуда $C_1 = 1$, $C_2 = 4$.
+
+Далее полюбившийся экзаменаторам вопрос: %сколька? Ответ: 42.
+\begin{task}
+    $y_1 = x$, $y_2 = \sin x$ -- решение линейного дифференциального уравнения. Какой у него наименьший порядок?
+\end{task}
+
+Вопрос, конечно, с подвохом. 
+\begin{itemize}
+    \item Если уравнение однородное с постоянными коэффициентами, то в ФСР войдут, как минимум, $1, x, \sin x$ и $\cos x$ -- наименьший порядок четвертый.
+    \item Если уравнение однородное с переменными коэффициентами, то согласно теории его порядок не меньше второго.
+    \item А если уравнение неоднородное, то согласно принципу суперпозици его решением будет $y_{\text{одн}} = \sin x - x$, а уравнение может быть первого порядка.
+\end{itemize}
+
+\begin{task}
+    \textbf{17.} Решить систему
+    \begin{equation*}
+        \begin{cases}
+            \dot x = x + 2y + 2z, \\ \dot y = 2x + y + 2z, \\ \dot z = 2x + 2y + z
+        \end{cases}, \hspace{2em} (\lambda_1 = 5, \lambda_{2, 3} = -1).
+    \end{equation*}
+\end{task}
+
+Для $\lambda = 5$ имеем $\vecl{h}_1 = (1, 1, 1)^T$. Для $\lambda = -1$ имеем систему 
+\begin{equation*}
+    (1, 1, 1)\begin{pmatrix}
+        a \\ b \\ c
+    \end{pmatrix},
+\end{equation*}
+откуда находим два собственных вектора $\vecl{h}_2 = (-1, 1, 0)^T$ и $\vecl{h}_3 = (-1, 0, 1)^T$.
+
+Далее пишем ответ.
+
+\begin{task}
+    \textbf{18-19. 14(3).} Найти положения равновесия, нарисовать фазовые траектории и вот это вот все 
+    \begin{equation*}
+        \begin{cases}
+            \dot x = y(x - 2y - 6), \\ \dot y = \ln (x - 2y).
+        \end{cases}
+    \end{equation*}
+\end{task}
+
+Положения равновесия:
+\begin{equation*}
+    \begin{cases}
+        \dot x = 0, \\ \dot y = 0
+    \end{cases} \implies \begin{cases}
+        y(x - 2y - 6) = 0, \\ \ln(x - 2y) = 0,
+    \end{cases}
+\end{equation*}
+откуда находим единственное положение равновесия $A(1, 0)$. Делаем замену $x = 1 + u$, $y = v$. Линеаризацию можно проводить так:
+
+\begin{equation*}
+    \begin{cases}
+        \dot u = P_x\bigr|_A\cdot u + P_y\bigr|_A \cdot v = y\bigr|_A\cdot u + (x - 2y - 6 + y(-2))\bigr|_A \cdot v = -5v, \\ 
+        \dot v = Q_x\bigr|_A\cdot u + Q_y\bigr|_A \cdot v = \frac{1}{x - 2y}\bigr|_A\cdot u + \frac{-2}{x - 2y}\bigr|_A \cdot v = u - 2v.
+    \end{cases}
+\end{equation*}
+Имеем 
+\begin{equation*}
+    A = \begin{pmatrix}
+        0 & -5 \\ 1 & -2
+    \end{pmatrix},
+\end{equation*}
+характеристическое уравнение
+\begin{equation*}
+    \begin{vmatrix}
+        -\lambda & -5 \\ 1 & -2-\lambda
+    \end{vmatrix} = \lambda^2 + 2\lambda + 5 = (\lambda + 1)^2 + 4 = 0,
+\end{equation*}ъ
+откуда $\lambda_{1, 2} = -1 \pm 2i$. $\mathrm{Re} \lambda < 0$ -- устойчивое положения равновесия. Более того, фокус. \textit{Картинку нарисуете сами, я в вас верю.}
+
+\begin{task}
+    \textbf{18-19. 15(4).} Дан функционал
+    \begin{equation*}
+        J[y] = \int_0^1 \Squared*{(y')^2 + y^2 + x^2y'}dx, \hspace{2em} y(0) = 1, \hspace{2em} y(1) = 1 + \frac 1e.
+    \end{equation*}
+    Найти допустимую экстремаль, исследовать на экстремум по знаку приращения.
+\end{task}
+
+Уравнение Эйлера:
+\begin{equation*}
+    F_y = \frac{d}{dx}F_{y'},
+\end{equation*}
+где под $F(x, y, y')$ подразумевается функция из-под интеграла:
+\begin{equation*}
+    J[y] = \int_a^b F(x, y, y') dx.
+\end{equation*}
+
+\textit{Лирическое отступление.} $\delta J_y[h]$ -- линейная часть приращения.
+\begin{equation*}
+    \Delta J = J[y + h] - J[y] = \underbrace{L[h]}_{\delta J_y[h]} + \ldots
+\end{equation*}
+Есть теорема, которая утверждает, что
+\begin{equation*}
+    \delta J_y[h] = \frac{d}{dt} J[y + th]\bigr|_{t = 0}
+\end{equation*}
+-- вариация по Гато.
+
+Далее, если $y \in M$ -- допустимая функция, то $y + h$ также должна быть допустимой. Для задач с закрепленными концами допустимым является класс фунцкий
+\begin{equation*}
+    M = \set{y \in C^1[a, b], y(a) = A, y(b) = B},
+\end{equation*}
+тогда
+\begin{equation*}
+    h \in \set{h \in C^1[a, b], h(a) = h(b) = 0}.
+\end{equation*}
+
+\textbf{Основная лемма вариационного исчисления:} 
+\begin{equation*}
+    \int_a^b \Phi(x)h(x) x = 0 \hspace{2em}\forall h(x) \in \tilde{M}.
+\end{equation*}
+
+Доказательство пристальным вглядыванием -- это следствие теоремы Хана-Банаха: так как функционал наблюдается на отрезке как 0, то он является нулевым.
+
+Возвращаемся к нашей задаче: у нас $F_y = 2y$, $F_{y'} = 2y' + x^2$, тогда
+\begin{equation*}
+    \frac{d}{dx}F_{y'} = \frac{d}{dx}(2y' + x^2) = 2y'' + 2x = 2y.
+\end{equation*}
+Получили уравнение
+\begin{equation*}
+    y'' - y = -x,
+\end{equation*}
+его решение очень легко найти: $y = x + C_1e^x + C_2e^{-x}$ -- это экстремаль. Найдем допустимую:
+\begin{equation*}
+    \begin{cases}
+        C_1 + C_2 = 1, \\ C_1e + C_2e^{-1} = 1 + e^{-1},
+    \end{cases}
+\end{equation*}
+откуда $\hat{y} = e^{-x} + x$.
+
+Проверяем на экстремум:
+\begin{multline*}
+    \Delta J = J[y + h] - J[y] = \int_0^1 \Squared*{2y'h' + (h')^2 + 2yh + h^2 + x^2h'}dx = \\ = \int_0^1 \Squared*{(h')^2 + h^2 + (2y'h' + 2yh + x^2h')}dx = \int_0^1 \Squared*{(h')^2 + h^2}dx > 0.
+\end{multline*}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

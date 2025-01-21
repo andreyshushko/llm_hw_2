@@ -1,0 +1,102 @@
+\section{Метод Франк -- Вульфа}
+\textit{Здесь пропущено начало занятия. Я допишу. Когда-нибудь.}
+
+Пусть в задаче $X = \conv(A)$, $A = \set{a_1, \ldots, a_p}$. Тогда утверждается, что $S = a_j$ для какого-то $j$.
+\textit{Доказательство:} от противного. Если $S = \sum \lambda_i a_i$, $\lambda_i \geq 0$, $\sum \lambda_i = 1$, то
+\begin{equation*}
+    \underbrace{g^TS}_{\text{среднее}} \geq \underbrace{g^Ta_j}_{\text{минимум}}.
+\end{equation*}
+
+Пусть $\norm{x}_2 \leq 1$. Рассмотрим задачу
+\begin{align*}
+    \min_{x \in \R^n} &\norm{Ax - b}_2^2, \\
+    \mathrm{s.t.} \hspace{0.5em} &\norm{x}_1 \leq 1.
+\end{align*}
+%картинка с окружностью и ромбиком
+Нужно найти $S = \argmin\limits_{z\in X}(g^Tz)$. Поскольку $X = \conv\set{\pm e_1, \ldots, \pm e_n}$, то
+\begin{equation*}
+    S = \argmin_{z \in \set{\pm e_1, \ldots, \pm e_n}} (g^Tz) = -\sign(g_i)e_i,
+\end{equation*}
+где $g_i = \max\limits_{j = \overline{1, n}} g_j$, $g = \nabla f(x^k)$.
+
+\subsection{Нахождение проекции на симплекс}
+Напоминаем, что симплекс есть множество
+\begin{equation*}
+    \Delta = \set{\sum x_i = 1, x_i \geq 0}.
+\end{equation*}
+Решаем \hyperref[simplex-min]{задачу оптимищации на симплексе}. Для этого мы итерируемся по формуле
+\begin{equation*}
+    x^{k + 1} = \argmin_{x \in X}\set*{\frac12 \norm{x^k - \alpha g - x}_2^2} = \argmin_{x \in X} \frac12 \norm{x - y}_2^2.
+\end{equation*}
+Для задачи записываем лагранжиан:
+\begin{equation*}
+    \mathcal{L} = \frac12\norm{x - y}_2^2 + \lambda\delim*{\sum x_i - 1},
+\end{equation*}
+$\max\limits_\lambda \min\limits{x_i \geq 0} L$. Одно из условий Каруша -- Куна -- Такера говорит, что градиент $\mathcal{L}$ равен нулю:
+\begin{equation*}
+    \mathcal{L}'_{x_i} = x_i - y_i + \lambda = 0 \implies x_i = \Squared{y_i - \lambda}_{+} = \max\set{0, y_i - \lambda},
+\end{equation*}
+где $\Squared{z}_{+} = \max(0, z)$. Вспоминаем, что 
+\begin{equation*}
+    \sum x_i = 1 = \sum_{i = 1}^{n} \Squared{y_i - \lambda}_{+},
+\end{equation*}
+и отсюда находим $\lambda$. Упорядочим компоненты $y$ по неубыванию: $y_1 \geq y_2 \geq \ldots \geq y_n$. Определим индекс $k$ как
+\begin{equation*}
+    k = \max_{j \in \overline{1, n}}\set*{\sum_{r = 1}^j y_r - \lambda > 0}.
+\end{equation*}
+Тогда
+\begin{equation*}
+    \sum_{i = 1}^n \Squared{y_i - \lambda}_{+} = \sum_{i = 1}^k (y_i - \lambda) = \sum_{i = 1}^k y_i - k\lambda = 1 \implies \lambda = \frac{1}{k}\delim*{\sum_{i = 1}^k y_i - 1},
+\end{equation*}
+и в таком случае
+\begin{equation*}
+    x_i = \max\set{0, y_i - \lambda}.
+\end{equation*}
+Это и есть выход нашего алгоритма. Сортировка занимает $\mathcal{O}(n\log n) = \tilde{\mathcal{O}}(n)$, значит, на симлпекс можно проецироваться за линейное время. 
+
+Например, для $\norm{x}_1 \leq 1$, 
+\begin{equation*}
+    \mathcal{L} = \frac12\norm{x - y}_2^2 + u\delim*{\sum_{i = 1}^n |x_i| - 1},
+\end{equation*}
+и
+
+\begin{equation*}
+    \frac{\partial \mathcal{L}}{\partial x_i} = x_i - y_i + u\sign(x_i) %0 \in
+\end{equation*}
+Можно было бы взять $y_i = x_i + u\sign(x_i)$, но это плохо, потому что мы исчем как раз $x$, а не $y$. Поэтому заметим, что $y_i = \abs{y_i}\sign(y_i)$ и возьмем
+\begin{equation*}
+    x_i = \sign(y_i)\Squared{\abs{y_i} - \lambda}_{+}.
+\end{equation*}
+Чтобы найти $\lambda$, придется вспомнить условие дополняющей нежесткости. Согласно ККТ
+\begin{enumerate}
+    \item $\norm{x}_1 \leq 1$;
+    \item $\lambda \geq 0$;
+    \item $\lambda(\norm{x}_1 - 1) = 0$ (это и есть условие дополняющей нежесткости);
+    \item $\nabla_x\mathcal{L} = 0$.
+\end{enumerate}
+\textit{Случай 1:} $\lambda = 0$, тогда $x_i = y_i \implies y \in \Delta$.
+
+\textit{Случай 2:} $\lambda > 0$, тогда $\norm{x}_1 = 1$:
+\begin{equation*}
+    1 = \sum \abs{\sign(y_i)\Squared{\abs{y_i} = \lambda}_{+}} = \sum \Squared{\abs{y_i} = \lambda}_{+} = \sum \max\set{0, y_i - \lambda}. 
+\end{equation*}
+Тогда
+\begin{enumerate}
+    \item если $y_i > \lambda > 0$, то 
+    \begin{equation*}
+        x_i = \sign(y_i)\Squared{\abs{y_i} - \lambda}_{+} = y_i - \lambda,
+    \end{equation*}
+    поскольку $\sign(y_i) = 1$ и $\abs{y_i} - \lambda = y_i - \lambda > 0$;
+    \item если $y_i \in \Squared{-\lambda, \lambda}$, то $x_i = 0$;
+    \item если $y_i < -\lambda < 0$, то 
+    \begin{equation*}
+        x_i = -\Squared*{-y_i - \lambda}_{+} = y_i + \lambda.
+    \end{equation*}
+\end{enumerate}
+В итоге имеем
+\begin{equation*}
+    x_i = \begin{cases} y_i - \lambda, & \lambda < y_i, \\
+                        0, & y_i \in \Squared{-\lambda, \lambda}, \\
+                        y_i + \lambda, & y_i < -\lambda, \end{cases}
+\end{equation*} 
+и мы снова укладываемся в линейное время.

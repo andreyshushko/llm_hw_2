@@ -1,0 +1,118 @@
+\section{Рестарты}
+
+Рассмотрим ускоренный градиентный метод FGM:
+\begin{align*}
+    x^1 &= x^0 - \frac{1}{L} \nabla f(x^0), \\
+    x^{k + 1} &= x^k - \frac{1}{L} \nabla f(x^k + \frac{k - 1}{k + 2}(x^k - x^{k - 1})) + \frac{k - 1}{k + 2}(x^k - x^{k + 1}),
+\end{align*}
+но функция сильно выпуклая (а метод при этом сильную выпуклость не использует). Имеем
+\begin{equation*}
+     f(\hat x) - f(x^*) \leq \frac{LR^2}{N^2} = \varepsilon,
+\end{equation*}
+откуда число подсчетов градиента
+\begin{equation*}
+    N = \sqrt{\frac{LR^2}{\varepsilon}}.
+\end{equation*}
+
+Идея в том, что если вместо коэффициентов $(k - 1) / (k + 2)$ взять коэффициенты $(\sqrt L - \sqrt M) / (\sqrt L + \sqrt M)$, то оценку можно улучшить до
+
+\begin{equation*}
+    N = \sqrt{\frac{L}{M}}\log_2 \delim*{\frac{MR^2}{\varepsilon}}.
+\end{equation*}
+
+Допустим теперь, что мы не знаем, как улучшить метод, не учитывающий сильную выпуклость. Тогда улучшить оценку помогают \textit{рестарты}.
+
+Допустим, мы запустили метод, не учитывающий сильную выпуклость, на $N$ итераций, в результате чего получили точку $x^N$. Идея рестарта в том, чтобы после завершения метода запустить его заново с вводом $x^0 = x^N$. 
+
+Пусть изначально был ввод $x^0 = \overline{0}$, а вывод $x^N$. Тогда мы запускаем алгоритм с вводом $x^N$ и получаем вывод $x^{N_2}$.
+
+Хитрость в том, что вычисления в методе FGM зависят от номера итерации, поэтому при рестарте вычисления идут по-другому, чем если бы рестарт не делали.
+
+Критерий остановки очередного рестарта:
+\begin{equation*}
+    \norm{x^N - x^*}_2^2 \leq \frac{1}{2}\norm{x^0 - x^*}_2^2.
+\end{equation*}
+
+Воспользуемся тем, что $f(x)$ сильно выпукла, то есть
+\begin{equation*}
+    f(x^N) \geq f(x^*) + \mean{\underbrace{\nabla f(x^*)}_{= 0}, x^N - x^*} + \frac{\mu}{2} \norm{x^N - x^*})2^2,
+\end{equation*}
+где $x^* = \argmin f(x)$.
+Имеем
+\begin{equation*}
+    \frac{\mu}{2}\norm{x^N - x^*}_2^2 \leq f(x^N) - f(x^*) \leq \frac{4LR^2}{N^2} = \frac{4L\norm{x^0 - x^*}_2^2}{N^2},
+\end{equation*}
+и
+\begin{equation*}
+    \norm{x^N - x^*}_2^2 \leq \frac{8L\norm{x^0 - x^*}_2^2}{N^2\mu} = \frac{1}{2}\norm{x^0 - x^*}_2^2,
+\end{equation*}
+откуда
+\begin{equation*}
+    N^2 = \frac{16L}{\mu} \implies N = 4\sqrt{\frac{L}{\mu}}.
+\end{equation*}
+
+Спустя $k$ рестартов имеем
+\begin{equation*}
+    \norm{x^{N_k} - x^*}_2^2 \leq \frac{1}{2^k} \norm{x^0 - x^*}_2^2.
+\end{equation*}
+Хотим получить невязку
+\begin{align*}
+    f(\hat{x}^{N_k}) - f(x^*) &\approx \varepsilon, \\
+    \frac{\mu}{2}\norm{\hat{x}^{N_k} - x^*}_2^2 &\approx \varepsilon, \\
+    \frac{\mu R^2}{2^{k + 1}} &\approx \varepsilon, \\
+    k + 1 &= \log_2 \delim*{\frac{\mu R^2}{\varepsilon}}.
+\end{align*}
+
+Тогда общее число итераций
+\begin{equation*}
+    T = Nk = 4\sqrt{\frac{L}{M}}\log_2\delim*{\frac{\mu R^2}{\varepsilon}},
+\end{equation*}
+что дает необходимую оценку.
+
+\section{Оценка констант $L$ и $\mu$}
+
+Берем задачу $f(x) = \frac{1}{2} \mean{x, Ax}$, $\nabla f(x) = Ax$, $\nabla^2 f(x) = A$, $x \in \R^n$. Предположим, что нас просят сравнить методы, например, зеркального спуска в первой норме с обычным градиентным спуском во второй норме. Они имеют одну и ту же сложность:
+\begin{equation*}
+    N = \mathcal{O}\delim*{\frac{M^2R^2}{\varepsilon^2}}.
+\end{equation*}
+Может показаться, что методы идентичны по сложности. Но проблема в том, что коэффициенты $M$, $R$ считаются по-разному в зависимости от нормы. Для зеркального спуска имеем
+\begin{equation*}
+    N = \mathcal{O} \delim*{\frac{M^2_\infty R^2_1}{\varepsilon^2}},
+\end{equation*}
+где $M_\infty \geq \norm{\nabla f(x)}_\infty$ и $R^2 = \norm{x^0 - x^*}_1^2$. Для обычного спуска
+\begin{equation*}
+    N = \mathcal{O} \delim*{\frac{M_2^2R_2^2}{\varepsilon^2}}.
+\end{equation*}
+Обе этих величины интересуют нас как функции $f(n, \varepsilon)$ (\textit{не забываем про $"n"{}$!}).
+
+Итак, для зеркального спуска $R^2 = 2V(x^*, x^0) \leq 2\ln n = \mathcal{O}(\ln n)$. Также
+\begin{equation*}
+    M_\infty \geq \norm{\nabla f(x)}_\infty = \norm{Ax}_\infty = \max_i \abs{\Squared{Ax}_i} = \max_i \norm*{\sum_j A_{ij} x_j} \leq \max_{i, j} \abs{A_{i, j}},
+\end{equation*}
+тогда берем $M_\infty = \abs{A_{ij}} = \mathcal{O}(1)$.
+В итоге для зеркального спуска
+\begin{equation*}
+    \mathcal{O}\delim*{\frac{\ln n}{\varepsilon^2}} = N.
+\end{equation*}
+Напомним, что в зекральном спуске
+\begin{equation*}
+    x^{k + 1}_i = \frac{x^k_i \cdot \exp (- \alpha \nabla_i f(x^k))}{\sum_{j} x_j \cdot \exp(-\alpha \nabla_j f(x^k)}.
+\end{equation*}
+Сложность проектирования для $\nabla f(x^k) = Ax^k$ равна $\mathcal{O}(n^2)$. Тогда итоговое число итераций
+\begin{equation*}
+    n^2\cdot N = n^2 \cdot \frac{\ln n}{\varepsilon}.
+\end{equation*}
+
+Для обычного градиента имеем
+\begin{equation*}
+    R^2_2 = \max_{x \in \Delta} \norm{x^0 - x}_2 \leq \max_{x \in \Delta} \norm{x^0 - x}_1 \leq \max_{x\in \Delta} \norm{x^0}_1 + \norm{x}_1 = 2
+\end{equation*}
+и
+\begin{equation*}
+    \norm{\nabla f(x)}_2 = \norm{Ax}_2 = \sum A^i x_i \leq \max_i \norm{A^i}_2 \leq \mathcal{O}(\sqrt n),
+\end{equation*}
+то есть берем $M_2 = \mathcal{O}(\sqrt n)$.
+Тогда
+\begin{equation*}
+    N = \mathcal{O}\delim*{\frac{n}{\varepsilon^2}}.
+\end{equation*}

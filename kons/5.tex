@@ -1,0 +1,25 @@
+Сделаем оценки на значения констант $R$ и $\Omega$ в скоростях сходимости градиентных спусках:
+
+\underline{PGD:}
+\begin{equation*}
+    R^2 = \norm{x^* - x^1}_2^2 \leq \max \limits_{\Delta_n} \norm{x - x^1}_2^2 \leq \leq \max \limits_{\Delta_n} \norm{x - x^1}_1 \leq \max \limits_{\Delta_n} \set{\underbrace{\norm{x}_1}_{ = 1} + \underbrace{\norm{x^1}_1}_{ = 1}} \leq 2  
+\end{equation*}
+\underline{MD:}
+\begin{equation*}
+    \Omega^2 = 2V(x, x^*) \leq 2 \max \limits_{x \in \Delta} V(x, x^1) = 2 \max \limits_{x \in \Delta} \sum \limits_{i  =1}^{n} x_i \log \frac{x_i}{x_i^1}
+\end{equation*}
+Вспомним, что для дивергенции на симплексе у нас начальный шаг определяется следующим условием (расписываем по определению и вспоминаем, что логарифм является вогнутой функцией):
+\begin{equation*}
+    x^1 = \argmin \limits_{x \in \mathcal{X}} \omega (x)
+     = \argmin \limits_{x \in \mathcal{X}} \left[- \sum \limits_{i  =1}^{n} x_i  \log \frac{1}{x_i} \right]\geq \text{ (по Йенсену) }
+     \geq \argmin \limits_{x \in \mathcal{X}} \left[-\log n\right]  
+\end{equation*}
+Тогда минимум достигается при равенстве 0 логарифма, что дат нам начальное значение: $x^1 = n \mathbf{1}^T$. Подставляя в нашу оценку на $\Omega$ получаем:
+\begin{equation*}
+    \Omega^2 = 2 \max \limits_{x \in \Delta} \sum \limits_{i  =1}^{n} x_i \log x_i + 2 \max \limits_{x \in \Delta} \sum \limits_{i  =1}^{n} x_i \log n \leq 2 \log n
+\end{equation*}
+
+Распишем теперь шаг MD:
+\begin{equation*}
+    x^{k + 1}  =\argmin \set{\la g_{k}, x \ra + \frac{1}{\alpha_k} V(x, x^*)} = \frac{x^k \circ  \exp (- \alpha_k g_k)}{\mathbf{1} \cdot x^k \circ  \exp (- \alpha_k g_k)} \leftarrow \text{ получили что-то типа softmax}
+\end{equation*}
